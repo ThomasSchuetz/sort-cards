@@ -5,7 +5,7 @@
     <table>
         <tr>
             <td>Number of cards to hold</td>
-            <td><input type="number" min="3" max="12" id="numberPlayers" value="8"></td>
+            <td><input type="number" min="3" max="12" id="numberCards" value="8"></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -13,9 +13,158 @@
             </td>
         </tr>
     </table>
-    
-    
 
+    <table>
+        <!-- Visualize sorting piles -->
+        <tr id="sortingPilesTypeRow"></tr>
+        <tr id="sortingPilesValueRow"></tr>
+    </table>
+
+    <table>
+        <!-- Visualize player's cards -->
+        <tr id="playerCardsRow"></tr>
+    </table>
+
+    <button type="button" style="display: none;" id="finishMoveButton" onclick="finishMove()">Finish move</button>
+
+    <div class="number-remaining-cards" id="numberRemainingCards" style="display: none;"></div>
 </body>
+
+
+<script src="src/cardStack.js"></script>
+<script src="src/sortingPile.js"></script>
+<script src="src/player.js"></script>
+<script src="src/game.js"></script>
+<script>
+    function startGame() {
+        let minCard = 2;
+        let maxCard = 99;
+        this.numberCards = Number(document.getElementById("numberCards").value);
+
+        let player = new Player();
+        let cardStack = new CardStack(minCard, maxCard);
+        let piles = {
+            1: new SortingPile(minCard, maxCard, true),
+            2: new SortingPile(minCard, maxCard, true),
+            3: new SortingPile(minCard, maxCard, false),
+            4: new SortingPile(minCard, maxCard, false)
+        }
+
+        this.game = new Game(player, cardStack, piles, this.numberCards);
+        this.game.start();
+
+        let finishMoveButton = document.getElementById("finishMoveButton");
+        finishMoveButton.style.display = "initial";
+
+        let numberRemainingCards = document.getElementById("numberRemainingCards");
+        numberRemainingCards.style.display = "initial";
+
+        this.selectedCard = null;
+        this.selectedPile = null;
+
+        update();
+    }
+
+    function update() {
+        let piles = this.game.getPilesStatus();
+        let playerCards = this.game.getPlayerCards();
+
+        let sortingPilesTypeRow = document.getElementById("sortingPilesTypeRow");
+        let sortingPilesValueRow = document.getElementById("sortingPilesValueRow");
+
+        clearRow(sortingPilesTypeRow);
+        clearRow(sortingPilesValueRow);
+
+        for (const pileIndex in piles) {
+            const pile = piles[pileIndex];
+
+            const arrow = sortingPilesTypeRow.insertCell();
+            arrow.appendChild(document.createTextNode(pile.isIncreasing ? "\u2B06" : "\u2B07"));
+            arrow.className = "pile-type";
+
+            const value = sortingPilesValueRow.insertCell();
+            value.appendChild(document.createTextNode(pile.value));
+            value.id = "pileValue_" + pileIndex;
+            value.onclick = function () { clickPile(value.id, pileIndex); };
+            value.className = "pile-value";
+        }
+
+        let cards = document.getElementById("playerCardsRow");
+        clearRow(cards);
+        for (let i = 0; i < this.numberCards; i++) {
+            const card = cards.insertCell();
+            card.id = "card_" + i;
+            card.className = "card";
+
+            let isValidCard = i < playerCards.length
+            if (isValidCard) {
+                let cardValue = playerCards[i];
+                card.appendChild(document.createTextNode(cardValue));
+                card.onclick = function () { clickCard(card.id, cardValue); };
+            }
+        }
+
+        let numberRemainingCards = document.getElementById("numberRemainingCards");
+        numberRemainingCards.innerText = "Number of remaining cards: " + this.game.numberRemainingCards();
+    }
+
+    function clearRow(row) {
+        while (row.childElementCount > 0) {
+            row.removeChild(row.firstChild);
+        }
+    }
+
+    function playCard() {
+        this.game.playCard(this.selectedCard, this.selectedPileIndex);
+
+        this.selectedCard = null;
+        this.selectedPileIndex = null;
+
+        update();
+    }
+
+    function clickPile(pileId, pileIndex) {
+        this.selectedPileIndex = pileIndex;
+
+        let sortingPilesValueRow = document.getElementById("sortingPilesValueRow");
+        for (const pileCellIndex in sortingPilesValueRow.childNodes) {
+            const pileCell = sortingPilesValueRow.childNodes[pileCellIndex];
+            pileCell.className = "pile-value";
+            if (pileCellIndex == pileIndex-1) {
+                pileCell.className = "pile-value-selected";
+            }
+        }
+
+        if (this.selectedCard != null) {
+            playCard();
+        }
+    }
+
+    function clickCard(cardId, card) {
+        this.selectedCard = card;
+
+        let cardsRow = document.getElementById("playerCardsRow");
+        for (const cardCellIndex in cardsRow.childNodes) {
+            const cardCell = cardsRow.childNodes[cardCellIndex];
+            cardCell.className = "card";
+            if (cardCellIndex == cardId) {
+                cardCell.className = "card-selected";
+            }
+        }
+
+        if (this.selectedPileIndex != null) {
+            playCard();
+        }
+    }
+
+    function finishMove() {
+        // draw new cards!
+
+        this.selectedCard = null;
+        this.selectedPileIndex = null;
+
+        update();
+    }
+</script>
 
 </html>
