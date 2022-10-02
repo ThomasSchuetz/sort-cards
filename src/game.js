@@ -16,7 +16,7 @@ class Game {
     }
 
     getPlayerCards() {
-        return this.player.getPlayerCards();
+        return this.player.getAllCards();
     }
 
     getPilesStatus() {
@@ -39,5 +39,9 @@ class Game {
         if (this.cardStack.size() > 0) {
             this.player.drawCard(this.cardStack.draw());
         }
+    }
+
+    numberRemainingCards() {
+        return this.cardStack.size();
     }
 }
