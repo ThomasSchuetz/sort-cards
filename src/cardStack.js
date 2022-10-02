@@ -16,4 +16,11 @@ class CardStack {
             allValues = allValues.filter(function (entry) { return entry !== newNumber });
         }
     }
+
+    draw() {
+        if (this.cards.length == 0) 
+            throw new RangeError("No more cards in deck!");
+
+        return this.cards.pop();
+    }
 }

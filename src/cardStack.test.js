@@ -12,7 +12,7 @@ describe("CardStack", () => {
 
         cardStack.cards.forEach(card => {
             existingCards.add(card);
-            assertCard(card, min, max)
+            assertCard(card, min, max);
         });
 
         assert(cardStack.cards.length === (max - min + 1));
@@ -20,7 +20,16 @@ describe("CardStack", () => {
     });
 
     it("Draw cards until exception is thrown", () => {
-        
+        let min = 1;
+        let max = 9;
+        let cardStack = new CardStack(min, max);
+
+        for (let i = 0; i <= max - min; i++) {
+            const card = cardStack.draw();
+            assertCard(card, min, max);
+        }
+
+        assert.throws(function () { cardStack.draw() }, RangeError);
     });
 })
 
