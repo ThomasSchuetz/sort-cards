@@ -8,7 +8,9 @@ class Player {
     }
 
     getAllCards() {
-        return new Array(...this.cards);
+        let copiedCards = new Array(...this.cards);
+        copiedCards.sort((a, b) => Number(a) - Number(b));
+        return copiedCards;
     }
 
     playCard(card) {
