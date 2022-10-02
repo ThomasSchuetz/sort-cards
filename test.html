@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="test_utils/mocha.min.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    <script src="test_utils/chai.min.js"></script>
+    <script src="test_utils/mocha.min.js"></script>
+
+    <script class="mocha-init">
+      mocha.setup('bdd');
+      mocha.checkLeaks();
+      assert = chai.assert;
+    </script>
+
+    <script src="src/cardStack.js"></script>
+    <script src="src/cardStack.test.js"></script>
+
+    <script class="mocha-exec">
+      mocha.run();
+    </script>
+  </body>
+</html>
