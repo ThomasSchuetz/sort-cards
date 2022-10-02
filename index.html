@@ -110,7 +110,7 @@
 
             let cardValue = playerCards[i];
             card.appendChild(document.createTextNode(cardValue));
-            card.onclick = function () { clickCard(card.id, cardValue); };
+            card.onclick = function () { clickCard(i, cardValue); };
         }
 
         let numberRemainingCards = document.getElementById("numberRemainingCards");

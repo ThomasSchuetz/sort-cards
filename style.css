@@ -16,8 +16,22 @@
     font-size: 5em;
 }
 
+.pile-value-selected {
+    background-color: green;
+    color: aliceblue;
+    text-align: center;
+    font-weight: bold;
+    font-size: 5em;
+}
+
 .card {
     background-color: darkgrey;
+    text-align: center;
+    font-size: 4em;
+}
+
+.card-selected {
+    background-color: green;
     text-align: center;
     font-size: 4em;
 }
