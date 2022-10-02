@@ -18,9 +18,13 @@ class CardStack {
     }
 
     draw() {
-        if (this.cards.length == 0) 
+        if (this.size() == 0) 
             throw new RangeError("No more cards in deck!");
 
         return this.cards.pop();
+    }
+
+    size() {
+        return this.cards.length;
     }
 }
