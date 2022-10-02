@@ -78,9 +78,13 @@
     }
 
     function update() {
-        let piles = this.game.getPilesStatus();
         let playerCards = this.game.getPlayerCards();
+        if ((playerCards.length == 0) && (this.game.numberRemainingCards() == 0)) {
+            alert("You won!");
+            return;
+        }
 
+        let piles = this.game.getPilesStatus();
         let sortingPilesTypeRow = document.getElementById("sortingPilesTypeRow");
         let sortingPilesValueRow = document.getElementById("sortingPilesValueRow");
 
@@ -103,6 +107,7 @@
 
         let cards = document.getElementById("playerCardsRow");
         clearRow(cards);
+
         for (let i = 0; i < playerCards.length; i++) {
             const card = cards.insertCell();
             card.id = "card_" + i;
