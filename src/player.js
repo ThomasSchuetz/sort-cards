@@ -8,8 +8,10 @@ class Player {
     }
 
     getAllCards() {
-        let copiedCards = new Array(...this.cards);
-        copiedCards.sort((a, b) => Number(a) - Number(b));
+        let copiedCards = [...this.cards];
+        if (this.getNumberOfCards() > 1) {
+            copiedCards.sort((a, b) => Number(a) - Number(b));
+        }
         return copiedCards;
     }
 
@@ -18,9 +20,8 @@ class Player {
             throw new RangeError("Player does not hold this card!");
         }
 
-        this.cards = this.cards.filter(
-            function (entry) { return entry !== card }
-        );
+        let cardIndex = this.cards.indexOf(card);
+        this.cards.splice(cardIndex, 1);
     }
 
     drawCard(card) {
