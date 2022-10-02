@@ -1,17 +1,30 @@
 describe("CardStack", () => {
     it("Constructor throws if min is above max", () => {
-        assert.throws(function() { new CardStack(2, 1) }, RangeError);
+        assert.throws(function () { new CardStack(2, 1) }, RangeError);
     });
 
-    // it("Throwing dice results in 5 dice, each between 1 and 6", () => {
-    //     var turn = new Turn();
-    //     turn.throwTheDice([]);
-    //     var dice = turn.showDice();
+    it("Constructor creates set of cards", () => {
+        let min = 2;
+        let max = 99;
+        let cardStack = new CardStack();
 
-    //     assert.equal(5, dice.length);
-    //     dice.forEach(d => {
-    //         assert(d >= 1);
-    //         assert(d <= 6);
-    //     });      
-    // });
+        let existingCards = new Set();
+
+        cardStack.cards.forEach(card => {
+            existingCards.add(card);
+            assertCard(card, min, max)
+        });
+
+        assert(cardStack.cards.length === (max - min + 1));
+        assert(existingCards.size === (max - min + 1));
+    });
+
+    it("Draw cards until exception is thrown", () => {
+        
+    });
 })
+
+function assertCard(value, min, max) {
+    assert(value >= min);
+    assert(value <= max);
+}
