@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+    <link href="style.css" rel="stylesheet">
+</head>
+
 <body>
     <table>
         <tr>
@@ -14,20 +18,29 @@
         </tr>
     </table>
 
-    <table>
+    <table width="80%">
         <!-- Visualize sorting piles -->
         <tr id="sortingPilesTypeRow"></tr>
         <tr id="sortingPilesValueRow"></tr>
     </table>
 
-    <table>
+    <table width="80%">
         <!-- Visualize player's cards -->
         <tr id="playerCardsRow"></tr>
     </table>
 
-    <button type="button" style="display: none;" id="finishMoveButton" onclick="finishMove()">Finish move</button>
-
-    <div class="number-remaining-cards" id="numberRemainingCards" style="display: none;"></div>
+    <table>
+        <tr>
+            <td>
+                <button type="button" style="display: none;" id="finishMoveButton" onclick="finishMove()">Finish
+                    move</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="number-remaining-cards" id="numberRemainingCards" style="display: none;">
+            </td>
+        </tr>
+    </table>
 </body>
 
 
@@ -59,8 +72,7 @@
         let numberRemainingCards = document.getElementById("numberRemainingCards");
         numberRemainingCards.style.display = "initial";
 
-        this.selectedCard = null;
-        this.selectedPile = null;
+        this.cardsPlayedThisMove = 0;
 
         update();
     }
@@ -91,21 +103,21 @@
 
         let cards = document.getElementById("playerCardsRow");
         clearRow(cards);
-        for (let i = 0; i < this.numberCards; i++) {
+        for (let i = 0; i < playerCards.length; i++) {
             const card = cards.insertCell();
             card.id = "card_" + i;
             card.className = "card";
 
-            let isValidCard = i < playerCards.length
-            if (isValidCard) {
-                let cardValue = playerCards[i];
-                card.appendChild(document.createTextNode(cardValue));
-                card.onclick = function () { clickCard(card.id, cardValue); };
-            }
+            let cardValue = playerCards[i];
+            card.appendChild(document.createTextNode(cardValue));
+            card.onclick = function () { clickCard(card.id, cardValue); };
         }
 
         let numberRemainingCards = document.getElementById("numberRemainingCards");
         numberRemainingCards.innerText = "Number of remaining cards: " + this.game.numberRemainingCards();
+
+        this.selectedCard = null;
+        this.selectedPileIndex = null;
     }
 
     function clearRow(row) {
@@ -116,9 +128,7 @@
 
     function playCard() {
         this.game.playCard(this.selectedCard, this.selectedPileIndex);
-
-        this.selectedCard = null;
-        this.selectedPileIndex = null;
+        this.cardsPlayedThisMove++;
 
         update();
     }
@@ -130,7 +140,7 @@
         for (const pileCellIndex in sortingPilesValueRow.childNodes) {
             const pileCell = sortingPilesValueRow.childNodes[pileCellIndex];
             pileCell.className = "pile-value";
-            if (pileCellIndex == pileIndex-1) {
+            if (pileCellIndex == pileIndex - 1) {
                 pileCell.className = "pile-value-selected";
             }
         }
@@ -158,12 +168,15 @@
     }
 
     function finishMove() {
-        // draw new cards!
+        if (this.cardsPlayedThisMove >= 2) {
+            this.game.drawCards();
 
-        this.selectedCard = null;
-        this.selectedPileIndex = null;
+            this.cardsPlayedThisMove = 0;
 
-        update();
+            update();
+        } else {
+            alert("You have to play at least two cards before you can finish your move!");
+        }
     }
 </script>
 
