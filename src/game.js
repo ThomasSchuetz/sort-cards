@@ -7,12 +7,7 @@ class Game {
     }
 
     start() {
-        while (
-            (this.cardStack.size() > 0) && 
-            (this.player.getNumberOfCards() < this.numberCards)) {
-
-            this.player.drawCard(this.cardStack.draw());
-        }
+        this.drawCards();
     }
 
     getPlayerCards() {
@@ -35,13 +30,18 @@ class Game {
     playCard(card, pileIndex) {
         this.piles[pileIndex].put(card);
         this.player.playCard(card);
-        
-        if (this.cardStack.size() > 0) {
-            this.player.drawCard(this.cardStack.draw());
-        }
     }
 
     numberRemainingCards() {
         return this.cardStack.size();
+    }
+
+    drawCards() {
+        while (
+            (this.cardStack.size() > 0) && 
+            (this.player.getNumberOfCards() < this.numberCards)) {
+
+            this.player.drawCard(this.cardStack.draw());
+        }
     }
 }
