@@ -96,6 +96,7 @@
 
             const arrow = sortingPilesTypeRow.insertCell();
             arrow.appendChild(document.createTextNode(pile.isIncreasing ? "\u2B06" : "\u2B07"));
+            arrow.style.width = "25%";
             arrow.className = "pile-type";
 
             const value = sortingPilesValueRow.insertCell();
@@ -111,11 +112,15 @@
         for (let i = 0; i < playerCards.length; i++) {
             const card = cards.insertCell();
             card.id = "card_" + i;
+            card.style.width = (100 / this.numberCards) + "%";
             card.className = "card";
 
             let cardValue = playerCards[i];
             card.appendChild(document.createTextNode(cardValue));
             card.onclick = function () { clickCard(i, cardValue); };
+        }
+        if (playerCards.length < this.numberCards) {
+            const invisibleCard = cards.insertCell();
         }
 
         let numberRemainingCards = document.getElementById("numberRemainingCards");
@@ -159,7 +164,7 @@
         this.selectedCard = card;
 
         let cardsRow = document.getElementById("playerCardsRow");
-        for (const cardCellIndex in cardsRow.childNodes) {
+        for (let cardCellIndex = 0; cardCellIndex < this.game.getPlayerCards().length; cardCellIndex++) {
             const cardCell = cardsRow.childNodes[cardCellIndex];
             cardCell.className = "card";
             if (cardCellIndex == cardId) {
