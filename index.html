@@ -82,6 +82,17 @@
             return;
         }
 
+        updatePiles();
+        updateCards(playerCards);
+
+        let numberRemainingCards = document.getElementById("numberRemainingCards");
+        numberRemainingCards.innerText = "Number of remaining cards in card stack: " + this.game.numberRemainingCards();
+
+        this.selectedCard = null;
+        this.selectedPileIndex = null;
+    }
+
+    function updatePiles() {
         let piles = this.game.getPilesStatus();
         let sortingPilesTypeRow = document.getElementById("sortingPilesTypeRow");
         let sortingPilesValueRow = document.getElementById("sortingPilesValueRow");
@@ -99,17 +110,17 @@
 
             const value = sortingPilesValueRow.insertCell();
             value.appendChild(document.createTextNode(pile.value));
-            value.id = "pileValue_" + pileIndex;
-            value.onclick = function () { clickPile(value.id, pileIndex); };
+            value.onclick = function () { clickPile(pileIndex); };
             value.className = "pile-value";
         }
+    }
 
+    function updateCards(playerCards) {
         let cards = document.getElementById("playerCardsRow");
         clearRow(cards);
 
         for (let i = 0; i < playerCards.length; i++) {
             const card = cards.insertCell();
-            card.id = "card_" + i;
             card.style.width = (100 / this.numberCards) + "%";
             card.className = "card";
 
@@ -120,13 +131,8 @@
         if (playerCards.length < this.numberCards) {
             const invisibleCard = cards.insertCell();
         }
-
-        let numberRemainingCards = document.getElementById("numberRemainingCards");
-        numberRemainingCards.innerText = "Number of remaining cards: " + this.game.numberRemainingCards();
-
-        this.selectedCard = null;
-        this.selectedPileIndex = null;
     }
+
 
     function clearRow(row) {
         while (row.childElementCount > 0) {
@@ -139,7 +145,7 @@
         update();
     }
 
-    function clickPile(pileId, pileIndex) {
+    function clickPile(pileIndex) {
         this.selectedPileIndex = pileIndex;
 
         let sortingPilesValueRow = document.getElementById("sortingPilesValueRow");
@@ -147,7 +153,7 @@
             const pileCell = sortingPilesValueRow.childNodes[pileCellIndex];
             pileCell.className = "pile-value";
             if (pileCellIndex == pileIndex - 1) {
-                pileCell.className = "pile-value selected";
+                pileCell.className += " selected";
             }
         }
 
@@ -164,7 +170,7 @@
             const cardCell = cardsRow.childNodes[cardCellIndex];
             cardCell.className = "card";
             if (cardCellIndex == cardId) {
-                cardCell.className = "card selected";
+                cardCell.className += " selected";
             }
         }
 
