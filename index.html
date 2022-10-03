@@ -72,8 +72,6 @@
         let numberRemainingCards = document.getElementById("numberRemainingCards");
         numberRemainingCards.style.display = "initial";
 
-        this.cardsPlayedThisMove = 0;
-
         update();
     }
 
@@ -138,8 +136,6 @@
 
     function playCard() {
         this.game.playCard(this.selectedCard, this.selectedPileIndex);
-        this.cardsPlayedThisMove++;
-
         update();
     }
 
@@ -178,13 +174,11 @@
     }
 
     function finishMove() {
-        if (this.cardsPlayedThisMove >= 2) {
+        try {
             this.game.drawCards();
 
-            this.cardsPlayedThisMove = 0;
-
             update();
-        } else {
+        } catch (Error) {
             alert("You have to play at least two cards before you can finish your move!");
         }
     }

@@ -1,9 +1,13 @@
 class Game {
+    minimumNumberPlayedCardsThisMove = 2;
+
     constructor(player, cardStack, piles, numberCards) {
         this.player = player;
         this.cardStack = cardStack;
         this.piles = piles;
         this.numberCards = numberCards;
+
+        this.cardsPlayedThisMove = 0;
     }
 
     start() {
@@ -30,6 +34,7 @@ class Game {
     playCard(card, pileIndex) {
         this.piles[pileIndex].put(card);
         this.player.playCard(card);
+        this.cardsPlayedThisMove++;
     }
 
     numberRemainingCards() {
@@ -37,11 +42,16 @@ class Game {
     }
 
     drawCards() {
+        if ((this.cardsPlayedThisMove > 0) && (this.cardsPlayedThisMove < this.minimumNumberPlayedCardsThisMove)) {
+            throw new Error();
+        }
+        
         while (
             (this.cardStack.size() > 0) && 
             (this.player.getNumberOfCards() < this.numberCards)) {
 
             this.player.drawCard(this.cardStack.draw());
         }
+        this.cardsPlayedThisMove = 0;
     }
 }
