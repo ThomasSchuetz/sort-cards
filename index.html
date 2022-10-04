@@ -54,6 +54,10 @@
     }
 
     function startGame() {
+        if (prompt("Password?", "") !== "123") {
+            return;
+        }
+
         let minCard = 2;
         let maxCard = 99;
         this.numberCards = Number(document.getElementById("numberCards").value);
